@@ -28,9 +28,9 @@
 			</style>
 			<div horizontal layout>
 				<div>
-					<paper-menu-button icon="menu">
-						<paper-item>Go to FB</paper-item>
-					</paper-menu-button>
+					<dse-menu icon="menu">
+						<a href="https://www.facebook.com/">Go to Facebook</a>
+					</dse-menu>
 				</div>
 				<div flex>
 					<paper-tabs selected="{{selected}}">
@@ -68,7 +68,21 @@
 				console.log('changed stored val to', this.selected)
 			},
 		});
+
 	</script>
+
+	<polymer-element name="dse-menu" extends="paper-menu-button">
+		<template>
+			<shadow></shadow>
+		</template>
+		<script>
+			Polymer({
+				focusAction: function(e) {
+					console.log('Opened menu', e);
+				}
+			});
+		</script>
+	</polymer-element>
 
 </body>
 </html>
