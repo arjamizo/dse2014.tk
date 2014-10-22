@@ -80,7 +80,6 @@
 		<script>
 			Polymer({
 				focusAction: function(e) {
-					console.log('Opened menu', e);
 				}
 			});
 		</script>
@@ -88,6 +87,7 @@
 
 	<polymer-element name="dse-useful">
 		<template>
+			<link type="text/css" rel="stylesheet" href="css/simplelittle.css" />
 			<table>
 				<tbody>
 					<core-localstorage name="understood" value="{{understood}}"></core-localstorage>
