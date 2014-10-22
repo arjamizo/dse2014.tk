@@ -11,6 +11,8 @@
 	<link rel="import" href="http://www.polymer-project.org/components/paper-menu-button/paper-menu-button.html">
 	<link type="text/css" rel="stylesheet" href="https://polymerthemes.com/candy/css/theme.css?download" />
 	<link type="text/css" rel="stylesheet" href="css/simplelittle.css" />
+	<link rel="import" href="http://www.polymer-project.org/components/paper-checkbox/paper-checkbox.html">
+
 </head>
 <body>
 
@@ -31,22 +33,25 @@
 			<div horizontal layout>
 				<div>
 					<dse-menu icon="menu">
-						<a href="https://www.facebook.com/">Go to Facebook</a>
+						<a href="https://www.facebook.com/groups/358462094314942/">Go to Facebook Group</a>
 					</dse-menu>
 				</div>
 				<div flex>
 					<paper-tabs selected="{{selected}}">
-						<paper-tab>Schedule</paper-tab>
-						<paper-tab>Schedule</paper-tab>
+						<paper-tab>Useful informations</paper-tab>
+						<paper-tab>Schedule (Google Calendar)</paper-tab>
 					</paper-tabs>
 				</div>
 			</div>
 			<core-selector selected="{{selected}}" flex layout vertical>
 				<section flex layout vertical>
-					<p>Here1</p>
+					<dse-useful/>
 				</section>
 				<section flex layout vertical>
-					<p>Here2</p>
+					<div>
+						<p>This is calendar created from the schedule available at http://inf.tu-dresden.de. Remember that you can add this to your own calendar with bottom <italic>(+) calendar</italic>.</p>
+						<iframe src="https://www.google.com/calendar/embed?mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=ue22r3b7iqtk41f373mg707f0k%40group.calendar.google.com&amp;color=%23125A12&amp;ctz=Europe%2FWarsaw" style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>
+					</div>
 				</section>
 			</core-selector>
 		</template>
@@ -82,6 +87,33 @@
 				focusAction: function(e) {
 					console.log('Opened menu', e);
 				}
+			});
+		</script>
+	</polymer-element>
+
+	<polymer-element name="dse-useful">
+		<template>
+			<table>
+				<tbody>
+					<template repeat="{{entry, id in entries}}">
+						<tr>
+							<td>{{entry}}</td>
+							<td>
+								<paper-checkbox class="blue" checked="{{understood[id]}}"></paper-checkbox>
+								<span style="display: none;">{{understood[id]?1:0}}</span>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+		</template>
+		<script>
+			Polymer({
+				entries: [
+					'You can access your mail at https://msx.tu-dresden.de',
+					'Eclipse is not only an astronomical phenomena, but also an IDE and even framework',
+				],
+				understood: [true, false]
 			});
 		</script>
 	</polymer-element>
