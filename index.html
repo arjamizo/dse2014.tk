@@ -135,7 +135,7 @@
 					position: block;
 				}
 			</style>
-			<paper-input value="{{overrideTime}}" placeholder="Custom trip time, e.g. 9:00"></paper-input>
+			<paper-input on-change="{{refresh}}" value="{{overrideTime}}" placeholder="Custom trip time, e.g. 9:00"></paper-input>
 			<h1>{{header}}
 				<paper-icon-button on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
 			</h1>
