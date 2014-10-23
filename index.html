@@ -41,6 +41,7 @@
 					<paper-tabs selected="{{selected}}">
 						<paper-tab>Useful informations</paper-tab>
 						<paper-tab>Schedule (Google Calendar)</paper-tab>
+						<paper-tab>DVB for Studentenheim</paper-tab>
 					</paper-tabs>
 				</div>
 			</div>
@@ -53,6 +54,9 @@
 						<p>This is calendar created from the schedule available at http://inf.tu-dresden.de. Remember that you can add this to your own calendar with bottom <italic>(+) calendar</italic>.</p>
 						<iframe src="https://www.google.com/calendar/embed?mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=ue22r3b7iqtk41f373mg707f0k%40group.calendar.google.com&amp;color=%23125A12&amp;ctz=Europe%2FWarsaw" style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>
 					</div>
+				</section>
+				<section>
+					<dse-dvb/>
 				</section>
 			</core-selector>
 		</template>
@@ -110,6 +114,52 @@
 					'Eclipse is not only an astronomical phenomena, but also an IDE and even framework',
 				],
 				understood: [true, false]
+			});
+		</script>
+	</polymer-element>
+
+	<polymer-element name="dse-dvb" attributes="from to">
+		<template>
+			<textarea>{{text}}</textarea>
+		</template>
+		<script>
+			Polymer({
+				attached: function() {
+					var params = {
+						'vaform[datum]': '23.10.2014',
+						'vaform[startname]': 'Zelleschner', //Weg
+						'vaform[startort]': 'Dresden',
+						'vaform[starttype]': 'stop',
+						'vaform[zeit]': '15:21',
+						'vaform[zeittyp]': 'dep',
+						'vaform[zielname]': 'Technische', //Universtat
+						'vaform[zielort]': 'Dresden',
+						'vaform[zieltype]': 'stop',
+					};
+					params = Object.keys(params).map(function(i, e){ return i+"="+params[i]; }).join(escape('&'))
+					console.log(params)
+
+					var form = "http://www.dvb.de/en/Timetable/Journey-planner/direkt.do"
+
+					console.log(form+"?"+params)
+					var url="http://query.yahooapis.com/v1/public/yql?format=xml&callback=handleJSONP&q=select * from html where url = '" + (form + "?" + params) + "'";
+
+					var handleJSONP = function () {
+						console.log('handleJSONP', arguments)
+						this.text = arguments[0].results[0];
+					}.bind(this)
+
+					window.handleJSONP = handleJSONP;
+
+					console.log('attached', url, window.handleJSONP);
+
+					document.body.appendChild((function(url) {
+						var el = document.createElement('script');
+						el.type="text/javascript";
+						el.src=url;
+						return el;
+					})(url));
+				}
 			});
 		</script>
 	</polymer-element>
