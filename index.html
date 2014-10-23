@@ -128,9 +128,17 @@
 
 	<polymer-element name="dse-dvb" attributes="from to header">
 		<template>
-			<paper-input value="{{overrideTime}}" placeholder="You can change time for this trip here."></paper-input>
-			<paper-icon-button style="float:left; display:inline;" on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
-			<h1>{{header}}</h1>
+			<link type="text/css" rel="stylesheet" href="css/simplelittle.css" />
+			<style>
+				:host {
+					float: left;
+					position: block;
+				}
+			</style>
+			<paper-input value="{{overrideTime}}" placeholder="Custom trip time, e.g. 9:00"></paper-input>
+			<h1>{{header}}
+				<paper-icon-button type="submit" on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
+			</h1>
 			<table>
 				<tbody>
 					<template repeat = "{{trip in trips}}">
