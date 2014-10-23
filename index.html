@@ -12,6 +12,9 @@
 	<link rel="import" href="http://www.polymer-project.org/components/paper-menu-button/paper-menu-button.html">
 	<link type="text/css" rel="stylesheet" href="css/simplelittle.css" />
 	<link rel="import" href="http://www.polymer-project.org/components/paper-checkbox/paper-checkbox.html">
+	<link rel="import" href="http://www.polymer-project.org/components/paper-fab/paper-fab.html">
+	<link rel="import" href="http://www.polymer-project.org/components/core-icons/core-icons.html">
+	<link rel="import" href="http://www.polymer-project.org/components/paper-icon-button/paper-icon-button.html">
 
 </head>
 <body>
@@ -56,7 +59,8 @@
 					</div>
 				</section>
 				<section>
-					<dse-dvb/>
+					<p>This webpage shows you several offers from public transport, especially students living in Zellescher Weg or Wundtstrasse might find them very useful.</p>
+					<dse-dvb from="Zelleschner" header="Studentheim to TUD"/>
 				</section>
 			</core-selector>
 		</template>
@@ -118,13 +122,23 @@
 		</script>
 	</polymer-element>
 
-	<polymer-element name="dse-dvb" attributes="from to">
+	<polymer-element name="dse-dvb" attributes="from to header">
 		<template>
+			<h1>{{header}}</h1>
+			<paper-icon-button on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
+			<table>
+				<tbody>
+					<template repeat = "{{trip in trips}}">
+						<tr><td>{{trip[0]}}</td> <td>{{trip[1]}}</td><td>{{trip[2]}}</td></tr>
+					</template>
+				</tbody>
+			</table>
 			<textarea>{{text}}</textarea>
 		</template>
 		<script>
 			Polymer({
-				attached: function() {
+				attached: function() {this.refresh();},
+				refresh: function() {
 					var params = {
 						'vaform[datum]': '23.10.2014',
 						'vaform[startname]': 'Zelleschner', //Weg
@@ -143,11 +157,19 @@
 
 					console.log(form+"?"+params)
 					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=handleJSONP&q=select * from html where url = '" + (form + "?" + params) + "'";
-					url += " and xpath='//*[@id=\"pdf_form\"]'";
+					url += " and xpath='//*[@id=\"pdf_form\"]//*[@class=\"full trip\"]'";
 
 					var handleJSONP = function () {
 						console.log('handleJSONP', arguments)
-						this.text = JSON.stringify(arguments[0].query.results, null, 2);
+						this.res = arguments[0].query.results;
+
+						this.trips = this.res.table.map(function(e, i){
+							var el=e.tbody.tr[0].td;
+							console.log(Object.keys(el));
+							return [(el[0] && el[0].strong) || '', el[4] && el[4].strong || '', el[4] && el[4].p || '']
+						})
+
+						this.text = JSON.stringify(this.res, null, 2);
 					}.bind(this)
 
 					window.handleJSONP = handleJSONP;
