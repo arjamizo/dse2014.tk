@@ -137,8 +137,10 @@
 			</style>
 			<paper-input value="{{overrideTime}}" placeholder="Custom trip time, e.g. 9:00"></paper-input>
 			<h1>{{header}}
-				<paper-icon-button type="submit" on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
+				<paper-icon-button on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
 			</h1>
+			<a href="{{sourceurl}}" target="{{target}}">Source</a> (open link in new window 
+			<paper-checkbox on-change='{{update}}'></paper-checkbox>)
 			<table>
 				<tbody>
 					<template repeat = "{{trip in trips}}">
@@ -151,6 +153,12 @@
 			var cnt = 0;
 			Polymer({
 				overrideTime: '',
+				sourceurl: '',
+				target: '',
+				update: function() {
+					this.target = this.target!="_blank" ? "_blank" : "_self"
+					console.log(this.target)
+				},
 				attached: function() {this.refresh();},
 				refresh: function() {
 					var params = {
@@ -170,7 +178,7 @@
 					var form = "http://www.dvb.de/en/Timetable/Journey-planner/direkt.do"
 
 					console.log(form+"?"+params)
-					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=_"+(++cnt)+"&q=select * from html where url = '" + (form + "?" + params) + "'";
+					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=_"+(++cnt)+"&q=select * from html where url = '" + (this.sourceurl = form + "?" + params) + "'";
 					url += " and xpath='//*[@id=\"pdf_form\"]//*[@class=\"full trip\"]'";
 
 					var handleJSONP = (function(cnt) {return function () {
