@@ -142,12 +142,12 @@
 					var form = "http://www.dvb.de/en/Timetable/Journey-planner/direkt.do"
 
 					console.log(form+"?"+params)
-					var url="http://query.yahooapis.com/v1/public/yql?format=xml&callback=handleJSONP&q=select * from html where url = '" + (form + "?" + params) + "'";
+					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=handleJSONP&q=select * from html where url = '" + (form + "?" + params) + "'";
 					url += " and xpath='//*[@id=\"pdf_form\"]'";
 
 					var handleJSONP = function () {
 						console.log('handleJSONP', arguments)
-						this.text = arguments[0].results[0];
+						this.text = JSON.stringify(arguments[0].query.results, null, 2);
 					}.bind(this)
 
 					window.handleJSONP = handleJSONP;
