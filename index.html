@@ -143,6 +143,7 @@
 
 					console.log(form+"?"+params)
 					var url="http://query.yahooapis.com/v1/public/yql?format=xml&callback=handleJSONP&q=select * from html where url = '" + (form + "?" + params) + "'";
+					url += " and xpath='//*[@id=\"pdf_form\"]'";
 
 					var handleJSONP = function () {
 						console.log('handleJSONP', arguments)
