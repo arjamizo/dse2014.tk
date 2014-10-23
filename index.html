@@ -60,7 +60,7 @@
 				</section>
 				<section>
 					<p>This webpage shows you several offers from public transport, especially students living in Zellescher Weg or Wundtstrasse might find them very useful.</p>
-					<dse-dvb from="Zelleschner" header="Studentheim to TUD"/>
+					<dse-dvb from="Zelleschner" to="Technische" header="Studentheim to TUD"></dse-dvb>
 				</section>
 			</core-selector>
 		</template>
@@ -140,17 +140,17 @@
 				attached: function() {this.refresh();},
 				refresh: function() {
 					var params = {
-						'vaform[datum]': '23.10.2014',
-						'vaform[startname]': 'Zelleschner', //Weg
+						'vaform[datum]': function() { return [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()].join('.')},
+						'vaform[startname]': function() {return this.from;}.bind(this),
 						'vaform[startort]': 'Dresden',
 						'vaform[starttype]': 'stop',
-						'vaform[zeit]': '15:21',
+						'vaform[zeit]': function() {return new Date().getHours() + ":" + new Date().getMinutes();},
 						'vaform[zeittyp]': 'dep',
-						'vaform[zielname]': 'Technische', //Universtat
+						'vaform[zielname]': function() {return this.to;}.bind(this),
 						'vaform[zielort]': 'Dresden',
 						'vaform[zieltype]': 'stop',
 					};
-					params = Object.keys(params).map(function(i, e){ return i+"="+params[i]; }).join(escape('&'))
+					params = Object.keys(params).map(function(i, e){ return i+"="+(typeof params[i]==='function'?params[i]():params[i]); }).join(escape('&'))
 					console.log(params)
 
 					var form = "http://www.dvb.de/en/Timetable/Journey-planner/direkt.do"
