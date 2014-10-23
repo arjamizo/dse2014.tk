@@ -15,6 +15,7 @@
 	<link rel="import" href="http://www.polymer-project.org/components/paper-fab/paper-fab.html">
 	<link rel="import" href="http://www.polymer-project.org/components/core-icons/core-icons.html">
 	<link rel="import" href="http://www.polymer-project.org/components/paper-icon-button/paper-icon-button.html">
+	<link rel="import" href="http://www.polymer-project.org/components/paper-input/paper-input.html">
 
 </head>
 <body>
@@ -62,6 +63,8 @@
 					<p>This webpage shows you several offers from public transport, especially students living in Zellescher Weg or Wundtstrasse might find them very useful.</p>
 					<dse-dvb from="Zelleschner" to="Technische" header="Studentheim to TUD"></dse-dvb>
 					<dse-dvb from="Technische" to="Zelleschner" header="TUD to Studentheim"></dse-dvb>
+					<dse-dvb from="Wassaplatz" to="Technische" header="Studentheim to TUD (INF)"></dse-dvb>
+					<dse-dvb from="Technische" to="Caspar-David-Friedrich-Platz" header="TUD (INF) to Studentheim"></dse-dvb>
 				</section>
 			</core-selector>
 		</template>
@@ -125,6 +128,7 @@
 
 	<polymer-element name="dse-dvb" attributes="from to header">
 		<template>
+			<paper-input value="{{overrideTime}}" placeholder="You can change time for this trip here."></paper-input>
 			<paper-icon-button style="float:left; display:inline;" on-tap="{{refresh}}" icon="refresh"></paper-icon-button>
 			<h1>{{header}}</h1>
 			<table>
@@ -138,6 +142,7 @@
 		<script>
 			var cnt = 0;
 			Polymer({
+				overrideTime: '',
 				attached: function() {this.refresh();},
 				refresh: function() {
 					var params = {
@@ -145,7 +150,7 @@
 						'vaform[startname]': function() {return this.from;}.bind(this),
 						'vaform[startort]': 'Dresden',
 						'vaform[starttype]': 'stop',
-						'vaform[zeit]': function() {return new Date().getHours() + ":" + new Date().getMinutes();},
+						'vaform[zeit]': function() {return (this.overrideTime && this.overrideTime.length>0 && this.overrideTime) || (new Date().getHours() + ":" + new Date().getMinutes());}.bind(this),
 						'vaform[zeittyp]': 'dep',
 						'vaform[zielname]': function() {return this.to;}.bind(this),
 						'vaform[zielort]': 'Dresden',
