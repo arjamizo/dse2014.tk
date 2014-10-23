@@ -61,6 +61,7 @@
 				<section>
 					<p>This webpage shows you several offers from public transport, especially students living in Zellescher Weg or Wundtstrasse might find them very useful.</p>
 					<dse-dvb from="Zelleschner" to="Technische" header="Studentheim to TUD"></dse-dvb>
+					<dse-dvb from="Technische" to="Zelleschner" header="TUD to Studentheim"></dse-dvb>
 				</section>
 			</core-selector>
 		</template>
@@ -136,6 +137,7 @@
 			<textarea>{{text}}</textarea>
 		</template>
 		<script>
+			var cnt = 0;
 			Polymer({
 				attached: function() {this.refresh();},
 				refresh: function() {
@@ -156,10 +158,10 @@
 					var form = "http://www.dvb.de/en/Timetable/Journey-planner/direkt.do"
 
 					console.log(form+"?"+params)
-					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=handleJSONP&q=select * from html where url = '" + (form + "?" + params) + "'";
+					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=_"+(++cnt)+"&q=select * from html where url = '" + (form + "?" + params) + "'";
 					url += " and xpath='//*[@id=\"pdf_form\"]//*[@class=\"full trip\"]'";
 
-					var handleJSONP = function () {
+					var handleJSONP = (function(cnt) {return function () {
 						console.log('handleJSONP', arguments)
 						this.res = arguments[0].query.results;
 
@@ -170,9 +172,10 @@
 						})
 
 						this.text = JSON.stringify(this.res, null, 2);
-					}.bind(this)
+						delete window['_'+cnt]
+					}})(cnt).bind(this)
 
-					window.handleJSONP = handleJSONP;
+					window['_'+cnt]=handleJSONP;
 
 					console.log('attached', url, window.handleJSONP);
 
