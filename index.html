@@ -20,6 +20,31 @@
 </head>
 <body>
 
+	<div>
+		You are going to be redirected to <a href="https://www.facebook.com/groups/358462094314942">Facebook DSE2014</a> in <span class="counter">5</span> seconds.
+		If you will not click anywhere on this webpage.
+		<script>
+		(function() {
+			var intId=setInterval(function() { 
+				var left=10;
+				return function() {
+					document.querySelector('span').textContent = left--;
+					if(left<0) window.location.href=document.querySelector('a').href;
+				}
+			}.call(), 1000);
+			var hnd;
+			hnd = document.addEventListener('click', function() {
+				clearInterval(intId);
+				document.body.removeChild(document.querySelector('div'));
+				
+				console.log(document.removeEventListener)
+				console.log(hnd)
+				console.log(document.removeEventListener(hnd))
+			})
+		})();;
+		</script>
+	</div>
+
 	<polymer-element name="tabs-with-content">
 		<template>
 			<style type="text/css">
