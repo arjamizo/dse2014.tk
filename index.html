@@ -51,7 +51,10 @@
 			</div>
 			<core-selector selected="{{selected}}" flex layout vertical>
 				<section flex layout vertical>
-					<dse-useful/>
+					<dse-useful>
+						<dse-useful-tip text="You can access your mail at https://msx.tu-dresden.de"></dse-useful-tip>
+						<dse-useful-tip text="Eclipse is not only an astronomical phenomena, but also an IDE and even framework"></dse-useful-tip>
+					</dse-useful>
 				</section>
 				<section flex layout vertical>
 					<div>
@@ -117,12 +120,22 @@
 		</template>
 		<script>
 			Polymer({
-				entries: [
-					'You can access your mail at https://msx.tu-dresden.de',
-					'Eclipse is not only an astronomical phenomena, but also an IDE and even framework',
-				],
-				understood: [true, false]
+				entries: [],
+				understood: []
 			});
+		</script>
+	</polymer-element>
+	<polymer-element name="dse-useful-tip" attributes="text">
+		<template>
+		</template>
+		<script>
+			Polymer({
+				domReady: function() {
+					// this.async(function() {
+						this.parentNode.entries.push(this.text);
+					// })
+				}
+			})
 		</script>
 	</polymer-element>
 
@@ -197,8 +210,6 @@
 					}})(cnt).bind(this)
 
 					window['_'+cnt]=handleJSONP;
-
-					console.log('attached', url, window.handleJSONP);
 
 					document.body.appendChild((function(url) {
 						var el = document.createElement('script');
