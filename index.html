@@ -36,10 +36,7 @@
 			hnd = document.addEventListener('click', function() {
 				clearInterval(intId);
 				document.body.removeChild(document.querySelector('div'));
-				
-				console.log(document.removeEventListener)
-				console.log(hnd)
-				console.log(document.removeEventListener(hnd))
+				document.removeEventListener('click', hnd)
 			})
 		})();;
 		</script>
