@@ -20,13 +20,13 @@
 </head>
 <body>
 
-	<div>
-		You are going to be redirected to <a href="https://www.facebook.com/groups/358462094314942">Facebook DSE2014</a> in <span class="counter">5</span> seconds.
-		If you will not click anywhere on this webpage.
+	<div style="width: 100px;">
+		You are going to be redirected to <a href="https://www.facebook.com/groups/358462094314942">Facebook DSE2014</a> in <span class="counter">30</span> seconds
+		if you will not click anywhere on this webpage.
 		<script>
 		(function() {
 			var intId=setInterval(function() { 
-				var left=10;
+				var left=document.querySelector('span').textContent*1;
 				return function() {
 					document.querySelector('span').textContent = left--;
 					if(left<0) window.location.href=document.querySelector('a').href;
