@@ -56,15 +56,15 @@
 				<section flex layout vertical>
 					<div>
 						<p>This is calendar created from the schedule available at http://inf.tu-dresden.de. Remember that you can add this to your own calendar with bottom <italic>(+) calendar</italic>.</p>
-						<iframe src="https://www.google.com/calendar/embed?mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=ue22r3b7iqtk41f373mg707f0k%40group.calendar.google.com&amp;color=%23125A12&amp;ctz=Europe%2FWarsaw" style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>
+						<iframe src="https://www.google.com/calendar/embed?mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=ue22r3b7iqtk41f373mg707f0k%40group.calendar.google.com&amp;color=%23125A12&amp;ctz=Europe%2FBerlin" style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>
 					</div>
 				</section>
 				<section>
 					<p>This webpage shows you several offers from public transport, especially students living in Zellescher Weg or Wundtstrasse might find them very useful.</p>
-					<dse-dvb from="Zelleschner" to="Technische" header="Studentheim to TUD"></dse-dvb>
-					<dse-dvb from="Technische" to="Zelleschner" header="TUD to Studentheim"></dse-dvb>
-					<dse-dvb from="Wassaplatz" to="Technische" header="Studentheim to TUD (INF)"></dse-dvb>
-					<dse-dvb from="Technische" to="Caspar-David-Friedrich-Platz" header="TUD (INF) to Studentheim"></dse-dvb>
+					<dse-dvb from="Zelleschner" to="Technische" header="Studentheim to TUD (Bus 61)"></dse-dvb>
+					<dse-dvb from="Technische" to="Zelleschner" header="TUD to Studentheim (Bus 61)"></dse-dvb>
+					<dse-dvb from="Heinrich-Zille-Strasse" to="Helmholtzstrasse" header="Studentheim to TUD (INF) (Bus 85)"></dse-dvb>
+					<dse-dvb from="Helmholtzstrasse" to="Heinrich-Zille-Strasse" header="TUD (INF) to Studentheim (Bus 85)"></dse-dvb>
 				</section>
 			</core-selector>
 		</template>
@@ -179,17 +179,18 @@
 
 					console.log(form+"?"+params)
 					var url="http://query.yahooapis.com/v1/public/yql?format=json&callback=_"+(++cnt)+"&q=select * from html where url = '" + (this.sourceurl = form + "?" + params) + "'";
+					this.sourceurl = this.sourceurl.replace(/%26/g, '&')
 					url += " and xpath='//*[@id=\"pdf_form\"]//*[@class=\"full trip\"]'";
 
 					var handleJSONP = (function(cnt) {return function () {
-						console.log('handleJSONP', arguments)
 						this.res = arguments[0].query.results;
 
 						this.trips = this.res.table.map(function(e, i){
 							var el=e.tbody.tr[0].td;
-							console.log(Object.keys(el));
+							if(JSON.stringify(el[4]).match('on foot')) return false;
 							return [(el[0] && el[0].strong) || '', el[4] && el[4].strong || '', el[4] && el[4].p || '']
 						})
+						.filter(function(e) {return !!e;})
 
 						this.text = JSON.stringify(this.res, null, 2);
 						delete window['_'+cnt]
